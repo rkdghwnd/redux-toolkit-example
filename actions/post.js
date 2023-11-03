@@ -28,10 +28,12 @@ exports.addPost = createAsyncThunk("post/add", async (data, thunkAPI) => {
   // 원래 미들웨어에서는 dispatch로 request, success, failure를
   // try catch로 나누고 구현했지만, 여기서는 할 필요 없음(알아서 해줌)
 
-  // createAsyncThunk 에서는 try catch 비추천
+  // createAsyncThunk 에서는 try catch 문 주의 !
   // 이유 : 에러메시지가 발생을 안함
   // 에러가 나면 rejected 상태로 가서 에러메시지가 뜨는데
   // rejected 되기 전에 try catch를 하면 rejected가 안돼서 에러메시지가 발생을 안함
   // 실패하든 성공하든 fulfilled로 가는 문제가 발생
+  // + 단 catch에 return thunkAPI.rejectWithValue(error.response.data); 하면 rejected로 넘어가기 때문에 사용해도됨
+  // -> 이것또한 코드가 길어지기 때문에 단순한 요청은 react-query 쓰는게 편하다.
   return await delay(500, data);
 });
